@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 ###############################################################################
-path = './MergeData/Merge2/CN/'
+path = './Merge2/CN/'
 dfcna = pd.DataFrame() 
 # pathname that will loop through, from file L0F0.rar prepared by Jing.
 lst = ['2000', '2002', '2004', '2006', '2008', '2010', '2012', '2014', '2016', '2018', '2020']
@@ -16,13 +16,13 @@ for pathname in lst:
     # it is updated before it is used for append in the next round
     dfcna = dfcna.append([dfcni], ignore_index=True)
 
-dfcnheader= pd.read_csv('./MergeData/Merge2/' + 'cn_header_file' + '.csv')
+dfcnheader= pd.read_csv('./Merge2/' + 'cn_header_file' + '.csv')
 lst = list(dfcnheader.columns)
 lst.append('CNYEAR')
 dfcna.columns = lst
 ###############################################################################
 # work on the CCL files. loop through all years in lst, folder used year as names
-path = './MergeData/Merge2/CCL/'
+path = './Merge2/CCL/'
 dfccla = pd.DataFrame() 
 # pathname that will loop through, from file L0F0.rar prepared by Jing.
 lst = ['2000', '2002', '2004', '2006', '2008', '2010', '2012', '2014', '2016', '2018', '2020', '2022']
@@ -34,7 +34,7 @@ for pathname in lst:
     # it is updated before it is used for append in the next round
     dfccla = dfccla.append([dfccli], ignore_index=True)
 
-dfcclheader= pd.read_csv('./MergeData/Merge2/' + 'ccl_header_file' + '.csv')
+dfcclheader= pd.read_csv('./Merge2/' + 'ccl_header_file' + '.csv')
 lst = dfcclheader.columns
 dfccla.columns = lst
 ###############################################################################
@@ -43,9 +43,9 @@ dfccla.columns = lst
 lst = ['2000', '2002', '2004', '2006', '2008', '2010', '2012', '2014', '2016', '2018', '2020']
 
 # try one or two years in the line below. uncomment
-lst = ['2000']
+lst = ['2008']
 # common path that use will used for individual contribution. Other data specify explicitly
-path = './MergeData/Merge2/'
+path = './Merge2/'
 # individual donation file across years have the same file name
 filename = 'indiv'
 # defind an empty dataframe in pandas, use it to store each individual file
@@ -64,7 +64,7 @@ for filename2 in lst:
     # dfindiv = dfindiv.append([dfa], ignore_index=True)
 
     # individual header    
-    dfindivheader= pd.read_csv('./MergeData/Merge2/' + 'indiv_header_file' + '.csv', 
+    dfindivheader= pd.read_csv('./Merge2/' + 'indiv_header_file' + '.csv', 
                            usecols = [0, 7, 8, 9 , 10, 11 ,13, 14])
     lst = list(dfindivheader.columns)
 
@@ -87,7 +87,10 @@ for filename2 in lst:
     # take the last four digit to be year
     fec_df['TRANSACTION_DT'] = fec_df['TRANSACTION_DT'].str[-4:]
     # convert data from string to numeric
-    fec_df['TRANSACTION_DT'] = fec_df['TRANSACTION_DT'].astype(int)
+    if fec_df['TRANSACTION_DT'].dtype == str:
+        fec_df['TRANSACTION_DT'] = fec_df['TRANSACTION_DT'].astype(int)
+
+
 
     # check if name has , in it
     fec_df['namehasstring'] = fec_df['NAME'].str.contains(',', regex=False)
@@ -154,7 +157,7 @@ for filename2 in lst:
     
     
     # # file is too large, no need to merge it. 
-    # fec_df.to_csv('./MergeData/Merge2/' + 'fecdonations0020' + '.csv')
+    # fec_df.to_csv('./Merge2/' + 'fecdonations0020' + '.csv')
    
     # compute political view for each person or each two years
     outmerge2 = fec_df.groupby(['TRANSACTION_DT','NAME_FEC','CITY', 'STATE', 'ZIP_CODE',
@@ -210,7 +213,7 @@ for filename2 in lst:
     
     dfindiv = dfindiv.append([outmerge5b], ignore_index=True)
 
-outmerge5b.to_csv("./MergeData/Merge2/Pythoncode/fund/outmerge5b.csv", index=False)
+outmerge5b.to_csv("./Merge2/Pythoncode/fund/outmerge5b.csv", index=False)
 
 # use the code below to find matches in the political donation data. 
 

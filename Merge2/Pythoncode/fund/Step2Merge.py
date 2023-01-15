@@ -7,7 +7,7 @@ start_time = time.time()
 people_data = pd.read_csv("./Merge1/merged_file_with_duplicates.csv")
 #test  people_data = pd.read_csv("./MergeData/Merge1/merge.csv")
 #test  outmerge_data = pd.read_csv("./MergeData/Merge2/Pythoncode/fund/outmerge5b.csv")
-outmerge_data = pd.read_csv("./Merge2/Pythoncode/fund/outmerge5c.csv")
+outmerge_data = pd.read_csv("./Merge2/Pythoncode/fund/outmerge5b.csv")
 
 #separates the first name and middle initial which is typically one space from the 'First" column and makes middle into new column, example: "John A." becomes "John" and "A"
 people_data['First'], people_data['Middle'] = people_data['First'].str.split(' ', 1).str  # type: ignore
@@ -32,6 +32,7 @@ people_data['NAME_FEC'] = people_data['NAME_FEC'].replace(['(MR.)$', '(MBA)$', '
                                           '(JR)$', '(JR.)$', '(III)$', '(II)$', '(IV)$', '(V)$', '(Jr.)$'
                                           , '(Jr.)$' , '(Sr.)$', '(J.D.)$', '(Esq.)$', '(P.E.)$' , '(Ph.D.)$'],'', regex=True)
 
+#people_data['NAME_FEC_final'] = people_data['NAME_FEC']
 
 #removes spaces from the 'Company Name' column, example: Falcon Point Capital LLC becomes FALCONPOINTCAPITALLLC
 people_data['EMPLOYER_FEC'] = people_data['CompanyName'].str.replace(' ', '')  # type: ignore
@@ -43,6 +44,7 @@ outmerge_data['EMPLOYER_FEC'] = outmerge_data['EMPLOYER_FEC'].replace(['(LLC)$',
 
 people_data['EMPLOYER_FEC_final'] = people_data['EMPLOYER_FEC'].str.upper()  # type: ignore
 
+#people_data.drop('NAME_FEC', axis=1, inplace=True)
 people_data.drop('EMPLOYER_FEC', axis=1, inplace=True)
 
 end_time = time.time()
@@ -62,11 +64,11 @@ merged_data.to_csv("./Merge2/Pythoncode/fund/merged_file.csv", index=False)
 
 # load a module that can compare distance and similarity of strings, ratcliff_obershelp 
 
-start_time = time.time()
+
 import textdistance
 
-## For people names
-"""merged_data2 = pd.concat([people_data, outmerge_data], axis=1)
+'''## For people names
+merged_data2 = pd.concat([people_data, outmerge_data], axis=1)
 T = len(outmerge_data['NAME_FEC'])
 dfsim = pd.DataFrame()
 
@@ -75,7 +77,6 @@ tmp1 = merged_data2[['NAME_FEC_final','NAME_FEC']]
 # loop through all rows in tmp1, which has names from two datasets
 for i in range(0, T, 1):
     #print(i)
-    start_time = time.time()
     # pick the ith row
     tmp2 = tmp1.iloc[i, :]
     # pick the first element, first company name
@@ -93,9 +94,6 @@ for i in range(0, T, 1):
     # score similarity score to dfsim. be careful with loc [usually use column names] and iloc [usually used numeric indexes]. 
     dfsim.loc[i,0] = a 
 
-    end_time = time.time()
-    print(f"Step {i} took: ", end_time - start_time, " seconds.")
-
 # assign dfsim to a new column in outmerge1 that is called similarity    
 merged_data2['similarity_names'] = dfsim
 print(merged_data2)
@@ -105,8 +103,8 @@ cutoff = 0.75
 outmerge1 = merged_data2[merged_data2['similarity_names'] > cutoff] 
 
 end_time = time.time()
-print("Step 2 took: ", end_time - start_time, " seconds.")"""
-
+print("Step 2 took: ", end_time - start_time, " seconds.")
+'''
 
 ## For company names
 
