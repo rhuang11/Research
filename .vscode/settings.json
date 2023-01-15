@@ -16,5 +16,6 @@
         "Ratcliff",
         "similariy",
         "textdistance"
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "basic"
 }
